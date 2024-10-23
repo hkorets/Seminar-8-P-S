@@ -43,7 +43,26 @@ summary(my.data)
 
 # superimpose cdf for standard normal
 
-# calculate maximal difference 
+# calculate maximal difference
+
+n <- 1000
+mu_1 <- 0
+sigma_1 <- 3
+mu_2 <- -2
+sigma_2 <- mu_1
+set.seed(123)
+data_1 <- rnorm(500, mean = mu_1, sd = sigma_1)
+data_2 <- rnorm(500, mean = mu_2, sd = sigma_2)
+
+my.data <- c(data_1, data_2)
+hist(my.data, breaks = 30, probability = TRUE, 
+     main = "Histogram and empirical density", 
+     xlab = "Values", col = "lightblue")
+lines(density(my.data), col = "red", lwd = 2)
+curve(dnorm(x, mean = mean(my.data), sd = sd(my.data)), 
+      add = TRUE, col = "green", lwd = 2)
+legend("topright", legend = c("Empirical density", "Normal density"), 
+       col = c("red", "green"), lwd = 2)
 
 ```
 
