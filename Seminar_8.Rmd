@@ -7,13 +7,20 @@ output: html_notebook
 
 ### Task: Generate your data
 
-This is a sample of size $n=1000$ combined from two samples of size $500$ from the normal distributions $N(\mu_k,\sigma_k^2)$ with $\mu_1 = Id$, $\sigma_1 = 3$ and $\mu_2 = -2$, $\sigma_2 = Id$
+This is a sample of size $n=1000$ combined from two samples of size $500$ from the normal distributions $N(\mu_k,\sigma_k^2)$ with $\mu_1 = 43$, $\sigma_1 = 3$ and $\mu_2 = -2$, $\sigma_2 = 43$
 
 Hint: you can use $\texttt{mean = c}(\mu_1,\mu_2)$ and $\texttt{sd = c}(\sigma_1,\sigma_2)$
 
 ```{r}
 # your code here
 n <- 1000
+mean1 = 43
+sd1 = 3
+mean2 = -2
+sd2 = 43
+
+sample_data <- rnorm(n, c(mean1, sd1), c(mean2, sd2))
+
 #my.data <- rnorm(...)
 #summary(my.data)
 ```
@@ -24,10 +31,21 @@ n <- 1000
 
 ```{r}
 # draw histogram
+hist(sample_data, 
+     probability = TRUE, 
+     breaks = 30, 
+     col = "lightblue",
+     main = "Histogram with Empirical and Normal Densities",
+     xlab = "Sample values",
+)
 
 # superimpose empirical density
+lines(density(sample_data), col="red", lwd=2)
 
 # superimpose normal density
+x <- seq(min(sample_data), max(sample_data), length = 1000)
+lines(x, dnorm(x, mean = 43, sd = 3), col = "darkblue", lwd = 2)
+lines(x, dnorm(x, mean = -2, sd = 43), col = "green", lwd = 2)
 
 ```
 
@@ -35,10 +53,15 @@ n <- 1000
 
 ```{r}
 # plot ecdf
+plot(ecdf(sample_data))
 
 # superimpose cdf for standard normal
+lines(x, pnorm(x, mean = 43, sd = 3), col ="red", lwd = 2)
+lines(x, pnorm(x, mean = -2, sd = 43), col ="darkblue", lwd = 2)
 
 # calculate maximal difference 
+max(abs(ecdf(sample_data)(x)-pnorm(x, mean = 43, sd = 3)))
+max(abs(ecdf(sample_data)(x)-pnorm(x, mean = -2, sd = 43)))
 
 ```
 
@@ -59,8 +82,12 @@ For a standard normal distribution, the kurtosis is $3$. If we get a larger valu
 ```{r}
 # your code here
 # skewness
+skewness <- (n / ((n - 1) * (n - 2))) * sum(((sample_data - mean(sample_data)) / sd(sample_data))^3)
+skewness
 
 # kurtosis
+kurtosis <- ((n * (n + 1)) / ((n - 1) * (n - 2) * (n - 3))) * sum(((sample_data - mean(sample_data)) / sd(sample_data))^4) - (3 * (n - 1)^2) / ((n - 2) * (n - 3))
+kurtosis
 
 ```
 
@@ -68,13 +95,15 @@ For a standard normal distribution, the kurtosis is $3$. If we get a larger valu
 
 ### For q= 0.1,...,0.9 calculate sample q-percentiles manually (i.e. by sorting the data and picking the corresponding values) and by using percentile
 
-
+```{r}
 percentiles <- function(data, method = "manual") {
+  
   sorted_data <- sort(data)
   n <- length(sorted_data)
   per <- c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)
   
   if (method == "manual") {
+    
     manual_percentile <- function(q) {
       index <- q * (n - 1)
       floor_index <- floor(index)
@@ -89,10 +118,10 @@ percentiles <- function(data, method = "manual") {
         return(lower_value + fraction * (upper_value - lower_value))
       }
     }
+    
     result <- sapply(per, manual_percentile)
     
   } else if (method == "quantile") {
-    # Use built-in quantile function
     result <- quantile(data, per)
     
   } else {
@@ -102,15 +131,16 @@ percentiles <- function(data, method = "manual") {
   return(result)
 }
 
-data <- c(12, 15, 14, 10, 18, 20, 11)
-
-manual_percentiles <- percentiles(data, method = "manual")
+manual_percentiles <- percentiles(sample_data, method = "manual")
 cat("Manual Percentile Calculation:\n")
 print(manual_percentiles)
 
-quantile_percentiles <- percentiles(data, method = "quantile")
+quantile_percentiles <- percentiles(sample_data, method = "quantile")
 cat("Quantile Function Calculation:\n")
 print(quantile_percentiles)
+
+
+```
 
 ## 5. Sample mean and sample standard error vs the theoretical ones
 
@@ -119,8 +149,12 @@ print(quantile_percentiles)
 ```{r}
 # your code here
 # theoretical expected value and variance
+thr_mean =  
+thr_var = 
 
 # sample mean and sample variance
+sampl_mean = mean(sample_data)
+sample_var = var(sample_data)
 
 ```
 
