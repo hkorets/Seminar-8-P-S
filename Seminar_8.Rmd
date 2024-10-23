@@ -81,10 +81,17 @@ $$
 For a standard normal distribution, the kurtosis is $3$. If we get a larger value, then more data are concentrated near the mean, and the empirical density is more steep
 
 ```{r}
-# your code here
-# skewness
+n <- length(my_data)
+mean_data <- mean(my_data)
+deviation <- my_data - mean_data
 
-# kurtosis
+second_moment <- sum(deviation^2) / n
+third_moment <- sum(deviation^3) / n
+fourth_moment <- sum(deviation^4) / n
+
+skewness_manual <- third_moment / (second_moment^(3/2))
+kurtosis_manual <- fourth_moment / (second_moment^2)
+
 
 ```
 
