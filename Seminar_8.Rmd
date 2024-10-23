@@ -68,10 +68,49 @@ For a standard normal distribution, the kurtosis is $3$. If we get a larger valu
 
 ### For q= 0.1,...,0.9 calculate sample q-percentiles manually (i.e. by sorting the data and picking the corresponding values) and by using percentile
 
-```{r}
-# your code here
 
-```
+percentiles <- function(data, method = "manual") {
+  sorted_data <- sort(data)
+  n <- length(sorted_data)
+  per <- c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)
+  
+  if (method == "manual") {
+    manual_percentile <- function(q) {
+      index <- q * (n - 1)
+      floor_index <- floor(index)
+      ceiling_index <- ceiling(index)
+      
+      if (floor_index == ceiling_index) {
+        return(sorted_data[floor_index + 1])
+      } else {
+        lower_value <- sorted_data[floor_index + 1]
+        upper_value <- sorted_data[ceiling_index + 1]
+        fraction <- index - floor_index
+        return(lower_value + fraction * (upper_value - lower_value))
+      }
+    }
+    result <- sapply(per, manual_percentile)
+    
+  } else if (method == "quantile") {
+    # Use built-in quantile function
+    result <- quantile(data, per)
+    
+  } else {
+    stop("Invalid method given. Use 'manual' or 'quantile'.")
+  }
+  
+  return(result)
+}
+
+data <- c(12, 15, 14, 10, 18, 20, 11)
+
+manual_percentiles <- percentiles(data, method = "manual")
+cat("Manual Percentile Calculation:\n")
+print(manual_percentiles)
+
+quantile_percentiles <- percentiles(data, method = "quantile")
+cat("Quantile Function Calculation:\n")
+print(quantile_percentiles)
 
 ## 5. Sample mean and sample standard error vs the theoretical ones
 
