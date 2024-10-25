@@ -88,7 +88,7 @@ hist(dtm,
      col = "lightblue",
      xlab = "Means",
      xlim = c(min(dtm),max(dtm))
-     )
+)
 # superimpose normal distribution
 x <- seq(min(dtm),max(dtm), by = .01)
 lines(x, dnorm(x, mean = mean(dtm), sd = sd(dtm)), col ="red", lwd = 2)

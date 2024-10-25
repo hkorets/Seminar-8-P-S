@@ -14,15 +14,17 @@ Hint: you can use $\texttt{mean = c}(\mu_1,\mu_2)$ and $\texttt{sd = c}(\sigma_1
 ```{r}
 # your code here
 n <- 1000
-mean1 = 43
-sd1 = 3
-mean2 = -2
-sd2 = 43
+mean1 <- 43
+sd1 <- 3
+mean2 <- -2
+sd2 <- 43
 
-sample_data <- rnorm(n, c(mean1, sd1), c(mean2, sd2))
+sample_data1 <- rnorm(n/2, mean1, sd1)
+sample_data2 <- rnorm(n/2, mean2, sd2)
 
-#my.data <- rnorm(...)
-#summary(my.data)
+sample_data <- c(sample_data1, sample_data2)
+
+summary(sample_data)
 ```
 
 ## 2. Visualise the data
@@ -44,8 +46,8 @@ lines(density(sample_data), col="red", lwd=2)
 
 # superimpose normal density
 x <- seq(min(sample_data), max(sample_data), length = 1000)
-lines(x, dnorm(x, mean = 43, sd = 3), col = "darkblue", lwd = 2)
-lines(x, dnorm(x, mean = -2, sd = 43), col = "green", lwd = 2)
+lines(x, dnorm(x, mean = mean1, sd = sd1), col = "darkblue", lwd = 2)
+lines(x, dnorm(x, mean = mean2, sd = sd2), col = "green", lwd = 2)
 
 ```
 
@@ -56,12 +58,12 @@ lines(x, dnorm(x, mean = -2, sd = 43), col = "green", lwd = 2)
 plot(ecdf(sample_data))
 
 # superimpose cdf for standard normal
-lines(x, pnorm(x, mean = 43, sd = 3), col ="red", lwd = 2)
-lines(x, pnorm(x, mean = -2, sd = 43), col ="darkblue", lwd = 2)
+lines(x, pnorm(x, mean = mean1, sd = sd1), col ="red", lwd = 2)
+lines(x, pnorm(x, mean = mean2, sd = sd2), col ="darkblue", lwd = 2)
 
 # calculate maximal difference 
-max(abs(ecdf(sample_data)(x)-pnorm(x, mean = 43, sd = 3)))
-max(abs(ecdf(sample_data)(x)-pnorm(x, mean = -2, sd = 43)))
+max(abs(ecdf(sample_data)(x)-pnorm(x, mean = mean1, sd = sd1)))
+max(abs(ecdf(sample_data)(x)-pnorm(x, mean = mean2, sd = sd2)))
 
 ```
 
@@ -149,12 +151,12 @@ print(quantile_percentiles)
 ```{r}
 # your code here
 # theoretical expected value and variance
-thr_mean =  
-thr_var = 
+thr_mean = (mean1 + mean2) / 2; thr_mean
+thr_var = (sd1^2 + sd2^2) / 2; thr_var
 
 # sample mean and sample variance
-sampl_mean = mean(sample_data)
-sample_var = var(sample_data)
+sampl_mean = mean(sample_data); sampl_mean
+sample_var = sd(sample_data)^2; sample_var
 
 ```
 
@@ -163,6 +165,16 @@ sample_var = var(sample_data)
 ### Calculate the fraction of the data that are within $k\sigma$ of the sample mean for $k=1,2,3$. Do we get the result expected? Why or why not?
 
 ```{r}
-# your code here
+sample_mean <- mean(sample_data)
+sample_sd <- sd(sample_data) 
 
+k_sigma_rule <- function(k) {
+  lower_bound <- sample_mean - k*sample_sd
+  upper_bound <- sample_mean + k*sample_sd
+  fraction_within_k_sigma <- sum(sample_data >= lower_bound & sample_data <= upper_bound) / n
+  return(fraction_within_k_sigma)
+}
+
+k_values <- 1:3
+fractions <- sapply(k_values, k_sigma_rule); fractions
 ```
