@@ -19,12 +19,11 @@ sigma1 <- 3
 mu2 <- -2
 sigma2 <- 50
 
-my.data <- rnorm(n, mean=c(mu1,mu2), sd=c(sigma1,sigma2))
+#my.data <- rnorm(n, mean=c(mu1,mu2), sd=c(sigma1,sigma2))
 
-#data1 <- rnorm(n, mean=mu1, sd=sigma1)
-#data2 <- rnorm(n, mean=mu2, sd=sigma2)
-#my.data <- c(data1, data2)
-
+data1 <- rnorm(n/2, mean=mu1, sd=sigma1)
+data2 <- rnorm(n/2, mean=mu2, sd=sigma2)
+my.data <- c(data1, data2)
 summary(my.data)
 
 ```
